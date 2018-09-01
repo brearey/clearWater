@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ClearWater_admin_2</string>
+    <string name="signin">Войти</string>
+    <string name="email">Электронная почта</string>
+    <string name="password">Пароль</string>
+    <string name="signinInfo">Введите электронную почту и пароль для входа в аккаунт</string>
+    <string name="logout">Logout</string>
+</resources>
