@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,54 +19,76 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
-    private DatabaseReference myRef;
-    private List<String> DiscrTask;
-    private String userName;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDatabaseReference;
 
-    ListView ListUserTask;
+    private String userEmail;
+    private ListView list_data;
+
+    private List<ZakazData> list_users = new ArrayList<>();
+
+    private ZakazData selectedZakaz; //hold selected zakaz
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        if (user != null) {
-            userName = user.getEmail();
-        }
+        //Control
+        list_data = (ListView) findViewById(R.id.list_data);
 
-        Toast.makeText(ListActivity.this, userName, Toast.LENGTH_SHORT).show();
-
-        ListUserTask = (ListView) findViewById(R.id.discr_for_task);
-        myRef = FirebaseDatabase.getInstance().getReference();
-        user = mAuth.getCurrentUser();
-        myRef.child("root").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                DiscrTask = dataSnapshot.child("tasks").getValue(t);
-                updateUI();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        initFirebase();
+        //Very important Part
+        addEventFirebaseListener();
 
     }
+    //Инициализация Базы данных Firebase
+    private void initFirebase() {
 
-    private void updateUI(){
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, DiscrTask);
-        ListUserTask.setAdapter(adapter);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            userEmail = user.getEmail();
+            Toast.makeText(ListActivity.this, userEmail, Toast.LENGTH_SHORT).show();
+        }
+
+        FirebaseApp.initializeApp(this);
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference();
+    }
+
+    //метод Выгрузки данных из Firebase
+    private void addEventFirebaseListener() {
+        list_data.setVisibility(View.INVISIBLE);
+
+        mDatabaseReference.child("zakazy")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (list_users.size() > 0) {
+                            list_users.clear();
+                        }
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            ZakazData zakaz = postSnapshot.getValue(ZakazData.class);
+                            list_users.add(zakaz);
+                        }
+                        ListViewAdapter adapter = new ListViewAdapter(ListActivity.this, list_users);
+                        list_data.setAdapter(adapter);
+
+                        list_data.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 }

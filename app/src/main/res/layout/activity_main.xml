@@ -1,62 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="30dp">
 
-    <Button
-        android:id="@+id/btn"
+    <TextView
+        android:id="@+id/tvNameApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/signin"
-        android:textColor="@color/colorWhite"
+        android:text="Вход в админку"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
         />
 
     <EditText
         android:id="@+id/etsEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="131dp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorPrimary"
         android:ems="10"
         android:hint="@string/email"
-        android:textColorHint="@color/colorWhite"
+        android:textColorHint="@color/common_google_signin_btn_text_dark_disabled"
         android:inputType="textEmailAddress"
+        android:layout_below="@+id/tvNameApp"
+        android:layout_marginTop="50dp"
         />
 
     <EditText
         android:id="@+id/etsPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorPrimary"
         android:ems="10"
         android:hint="@string/password"
-        android:textColorHint="@color/colorWhite"
+        android:textColorHint="@color/common_google_signin_btn_text_dark_disabled"
         android:inputType="textPassword"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/etsEmail"
         />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/LL"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/signinInfo"
-        android:textAlignment="center"
-        android:textColor="@color/colorWhite"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        />
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/etsPassword">
 
-</LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/signin"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="1"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>
